@@ -13,36 +13,38 @@ var lastCartUpdate = 0;
  */
 function addToCart(itemCode) {
 
- var req = newXMLHttpRequest();
+    var req = newXMLHttpRequest();
 
- req.onreadystatechange = getReadyStateHandler(req, updateCart);
- 
- req.open("POST", "cart.do", true);
- req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
- req.send("action=add&item="+itemCode);
- 
- 
+    req.onreadystatechange = getReadyStateHandler(req, updateCart);
+
+    req.open("POST", "cart.do", true);
+    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    req.send("action=add&item=" + itemCode);
+
+
 }
 
 // This will broadcast individual items and actions
-//function sendAdd(itemCode) {
-//    sendText("{\"action\":\"add\"," + "\"item\":\"" + itemCode + "\"}");
-//}
+function sendAdd(itemCode) {
+    console.log("adding " + itemCode);
+    sendText("{\"action\":\"add\"," + "\"item\":\"" + itemCode + "\"}");
+}
 
 // This will broadcast individual items and actions
-//function sendRemove(itemCode) {
-//    sendText("{\"action\":\"remove\"," + "\"item\":\"" + itemCode + "\"}");
-//}
+function sendRemove(itemCode) {
+    console.log("removing " + itemCode);
+    sendText("{\"action\":\"remove\"," + "\"item\":\"" + itemCode + "\"}");
+}
 
 function removeFromCart(itemCode) {
 
- var req = newXMLHttpRequest();
+    var req = newXMLHttpRequest();
 
- req.onreadystatechange = getReadyStateHandler(req, updateCart);
- 
- req.open("POST", "cart.do", true);
- req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
- req.send("action=remove&item="+itemCode);
+    req.onreadystatechange = getReadyStateHandler(req, updateCart);
+
+    req.open("POST", "cart.do", true);
+    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    req.send("action=remove&item=" + itemCode);
 
 }
 
@@ -74,33 +76,43 @@ function removeFromCart(itemCode) {
 //
 // document.getElementById("total").innerHTML = cart.getAttribute("total");
 //}
-function updateCart(cartJson){
-    
+function updateCart(cartJson) {
+
     // UNCOMMENT this line if you don't like the way this works. 
     // This will broadcast the entire cart.
-     sendText(cartJson);
-    
+//     sendText(cartJson);
+    console.log(cartJson);
     var cart = JSON.parse(cartJson);
     var generated = cart.cartGenerated;
     if (generated > lastCartUpdate) {
-        
+
         lastCartUpdate = generated;
         var contents = document.getElementById("contents");
-        contents.innerHTML= "";
+        contents.innerHTML = "";
         var items = cart.Items;
-        for (var I = 0; I< items.length; I++){
-            
+        for (var I = 0; I < items.length; I++) {
+
             var item = items[I];
             var name = item.ItemName;
             var quantity = item.ItemQuantity;
-            
+
             var listItem = document.createElement("li");
-            listItem.appendChild(document.createTextNode(name+" x "+quantity));
+            listItem.appendChild(document.createTextNode(name + " x " + quantity));
             contents.appendChild(listItem);
-            
+
         }
-        
-        
+
+
     }
     document.getElementById("total").innerHTML = cart.total;
+}
+
+function refreshCart() {
+    var req = newXMLHttpRequest();
+
+    req.onreadystatechange = getReadyStateHandler(req, updateCart);
+
+    req.open("GET", "cart.do", true);
+    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    req.send();
 }

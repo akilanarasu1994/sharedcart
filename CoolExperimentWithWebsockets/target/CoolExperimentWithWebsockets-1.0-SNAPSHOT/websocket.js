@@ -51,13 +51,14 @@ websocket.onmessage = function processMessage(message) {
     console.log("received actionitem: " + message.data);
     var receivedObject = JSON.parse(message.data);
     if (receivedObject != null) {
-        var item = receivedObject.item;
-        var action = receivedObject.action;
-        if (action === "add") {
-            addToCart(item);
-        } else if (action === "remove") {
-            removeFromCart(item);
-        }
+//        var item = receivedObject.item;
+//        var action = receivedObject.action;
+//        if (action === "add") {
+//            addToCart(item);
+//        } else if (action === "remove") {
+//            removeFromCart(item);
+//        }
+        refreshCart();
     }
 }
 

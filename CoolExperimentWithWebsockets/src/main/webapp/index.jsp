@@ -24,9 +24,9 @@
                         <td><%= item.getDescription()%></td>
                         <td><%= item.getFormattedPrice()%></td>
                         <!-- remove sendAdd() and sendRemove() to not broadcast individual item actions -->
-                        <td><button onclick="addToCart('<%= item.getCode()%>');">Add to Cart</button></td>
-                        <td><button onclick="removeFromCart('<%= item.getCode()%>');">Remove from Cart</button></td>
-                    </tr>
+                        <td><button onclick="addToCart('<%= item.getCode()%>'); sendAdd('<%= item.getCode()%>')">Add to Cart</button></td>
+                        <td><button onclick="removeFromCart('<%= item.getCode()%>'); sendRemove('<%= item.getCode()%>')">Remove from Cart</button></td>
+                    </tr
                     <% }%>
                 </tbody>
             </table>

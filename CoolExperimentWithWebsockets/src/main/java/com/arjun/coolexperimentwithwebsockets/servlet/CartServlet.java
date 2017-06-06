@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.*;
 import java.util.Enumeration;
+import javax.servlet.ServletContext;
 import org.json.JSONObject;
 
 
@@ -33,8 +34,14 @@ public class CartServlet extends HttpServlet {
       System.out.println(header+": "+req.getHeader(header));
     }
 
-    Cart cart = getCartFromSession(req);
-
+    ServletContext context = this.getServletContext();
+    Cart cart = (Cart) context.getAttribute("cart");
+    if (cart == null) {
+        System.out.println("creating cart...");
+        cart = new Cart();
+        context.setAttribute("cart", cart);
+    }
+    
     String action = req.getParameter("action");
     String item = req.getParameter("item");
     
@@ -69,7 +76,13 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-       
+       System.out.println("doGet");
+        ServletContext context = this.getServletContext();
+        Cart cart = (Cart) context.getAttribute("cart");
+        if (cart == null) {
+            cart = new Cart();
+            context.setAttribute("cart", cart);
+        }
         doPost(req,res);
     }
     
